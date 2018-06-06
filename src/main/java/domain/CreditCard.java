@@ -2,7 +2,7 @@ package domain;
 
 import org.apache.commons.lang.RandomStringUtils;
 
-public class CreditCard extends PaymentMethod{
+public class CreditCard {
     private String cardNumber;
     private String cardType;
     private String expiryMonth;
