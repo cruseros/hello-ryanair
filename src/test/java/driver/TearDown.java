@@ -15,9 +15,13 @@ public class TearDown {
 
     @After
     public static void teardown() {
+        quitDriver();
+        openReport();
+    }
+
+    private static void quitDriver() {
         WebDriver driver = Driver.getDriver();
         driver.quit();
-        openReport();
     }
 
     private static void openReport() {
