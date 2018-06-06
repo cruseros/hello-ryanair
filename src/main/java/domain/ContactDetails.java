@@ -1,22 +1,21 @@
 package domain;
 
+import org.apache.commons.lang.RandomStringUtils;
+
 public class ContactDetails {
     private String country;
-    private int phoneNumber;
-    private boolean sendSms;
-    private boolean sendNewsletter;
-    private boolean donateFootprint;
+    private String phoneNumber;
 
-    public ContactDetails(String country, int phoneNumber) {
-        this.country = country;
-        this.phoneNumber = phoneNumber;
+    public ContactDetails() {
+        this.country = "";
+        this.phoneNumber = RandomStringUtils.randomNumeric(9);
     }
 
     public String getCountry() {
         return country;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 }

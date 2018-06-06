@@ -8,7 +8,7 @@ import pages.helpers.PageObject;
 
 public class BookingExtrasPriorityDialog extends PageObject {
 
-    @FindBy(id="ngdialog2")
+    @FindBy(xpath = "//*[contains(@id, 'ngdialog') and @role='alertdialog']")
     private WebElement bookingExtrasPriorityDialog;
 
     @FindBy(xpath="//button[contains(@class, 'popup-msg__button--cancel')]")

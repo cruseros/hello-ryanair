@@ -1,6 +1,9 @@
 package pages;
 
-import org.apache.commons.lang.RandomStringUtils;
+import domain.BillingInfo;
+import domain.ContactDetails;
+import domain.CreditCard;
+import domain.PassengerDetails;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
@@ -100,34 +103,34 @@ public class BookingPaymentPage extends PageObject {
         DriverWait.until(ExpectedConditions.visibilityOf(bookingPaymentPage));
     }
 
-    public void fillRandomPaxInfo() {
-        DropDown.selectRandomElement(titleDropDown, titleDropDownOptions);
-        Field.write(firstName, RandomStringUtils.randomAlphabetic(7));
-        Field.write(lastName, RandomStringUtils.randomAlphabetic(7));
+    public void fillPassengerDetails(PassengerDetails passengerDetails) {
+        DropDown.selectElement(titleDropDown, titleDropDownOptions, passengerDetails.getTitle());
+        Field.write(firstName, passengerDetails.getFirstName());
+        Field.write(lastName, passengerDetails.getLastName());
     }
 
-    public void fillRandomContactDetails() {
-        DropDown.selectRandomElement(countryDropDown, countryDropDownOptions);
-        Field.write(phoneNumber, RandomStringUtils.randomNumeric(9));
+    public void fillContactDetails(ContactDetails contactDetails) {
+        DropDown.selectElement(countryDropDown, countryDropDownOptions, contactDetails.getCountry());
+        Field.write(phoneNumber, contactDetails.getPhoneNumber());
     }
 
-    public void fillCreditCard(String cardNumber, String expiryMonth, String expiryYear, String securityCode) {
+    public void fillCreditCard(CreditCard creditCard) {
         creditCardRadioButton.click();
-        Field.write(this.cardNumber, cardNumber.replaceAll("\\s",""));
-        DropDown.selectRandomElement(cardTypeDropDown, cardTypeDropDownOptions);
-        DropDown.selectElement(expiryMonthDropDown, expiryMonthDropDownOptions, expiryMonth);
-        DropDown.selectElement(expiryYearDropDown, expiryYearDropDownOptions, expiryYear);
-        Field.write(this.securityCode, securityCode);
-        Field.write(cardHolder, RandomStringUtils.randomAlphabetic(7));
+        Field.write(this.cardNumber, creditCard.getCardNumber());
+        DropDown.selectElement(cardTypeDropDown, cardTypeDropDownOptions, creditCard.getCardType());
+        DropDown.selectElement(expiryMonthDropDown, expiryMonthDropDownOptions, creditCard.getExpiryMonth());
+        DropDown.selectElement(expiryYearDropDown, expiryYearDropDownOptions, creditCard.getExpiryYear());
+        Field.write(this.securityCode, creditCard.getSecurityCode());
+        Field.write(cardHolder, creditCard.getCardHolder());
     }
 
-    public void fillRandomBillingInfo() {
-        Field.write(address1Field, RandomStringUtils.randomAlphabetic(10));
-        Field.write(address2Field, RandomStringUtils.randomAlphabetic(10));
-        Field.write(cityField, RandomStringUtils.randomAlphabetic(10));
-        Field.write(zipCodeField, RandomStringUtils.randomNumeric(5));
-        DropDown.selectRandomElement(billingCountryDropDown, billingCountryDropDownOptions);
-        acceptConditionsCheckbox.click();
+    public void fillBillingInfo(BillingInfo billingInfo) {
+        Field.write(address1Field, billingInfo.getAddressField1());
+        Field.write(address2Field, billingInfo.getAddressField2());
+        Field.write(cityField, billingInfo.getCity());
+        Field.write(zipCodeField, billingInfo.getZipCode());
+        DropDown.selectElement(billingCountryDropDown, billingCountryDropDownOptions, billingInfo.getCountry());
+        if(billingInfo.isAcceptConditions()) { acceptConditionsCheckbox.click(); }
     }
 
     public void clickInPayNowButton() {

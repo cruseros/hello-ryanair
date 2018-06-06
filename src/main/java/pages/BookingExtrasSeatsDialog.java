@@ -8,10 +8,13 @@ import pages.helpers.PageObject;
 
 public class BookingExtrasSeatsDialog extends PageObject {
 
-    @FindBy(id="ngdialog1")
+    @FindBy(xpath = "//*[contains(@id, 'ngdialog') and @role='alertdialog']//div[contains(@class, 'dialog-aside')]")
     private WebElement bookingExtrasSeatsDialog;
 
-    @FindBy(xpath="//*[@translate='trips.seats.modal.close_seatmap']")
+    @FindBy(xpath = "//core-icon[contains(@class, 'dialog-close')]")
+    private WebElement crossButton;
+
+    @FindBy(xpath = "//span[contains(@translate, 'close_seatmap')]")
     private WebElement noThanksButton;
 
     public BookingExtrasSeatsDialog() {
@@ -20,10 +23,23 @@ public class BookingExtrasSeatsDialog extends PageObject {
         DriverWait.until(ExpectedConditions.visibilityOf(bookingExtrasSeatsDialog));
     }
 
-    public BookingExtrasPage closeDialog() {
-        DriverWait.until(ExpectedConditions.visibilityOf(noThanksButton));
+    private boolean isElementPresent(WebElement webElement) {
+        try{
+            DriverWait.until(ExpectedConditions.visibilityOf(webElement));
 
-        noThanksButton.click();
+            return webElement.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public BookingExtrasPage closeDialog() {
+        // There is an A/B
+        if (isElementPresent(noThanksButton)) {
+            noThanksButton.click();
+        } else {
+            crossButton.click();
+        }
 
         return new BookingExtrasPage();
     }

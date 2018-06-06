@@ -1,6 +1,6 @@
 package driver;
 
-import cucumber.api.java.After;
+import org.junit.After;
 import org.openqa.selenium.WebDriver;
 import pages.helpers.Driver;
 

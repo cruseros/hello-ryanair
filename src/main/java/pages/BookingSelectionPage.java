@@ -50,11 +50,11 @@ public class BookingSelectionPage extends PageObject {
         regularFare.click();
     }
 
-    public void selectRandomOutbound() {
+    private void selectRandomOutbound() {
         selectRandomBound(outboundPriceButtons, outboundRegularFareRadioBox);
     }
 
-    public void selectRandomInbound() {
+    private void selectRandomInbound() {
         selectRandomBound(inboundsPriceButtons, inboundRegularFareRadioButton);
     }
 

@@ -8,10 +8,10 @@ import pages.helpers.*;
 
 public class LoginRegisterDialog extends PageObject {
 
-    @FindBy(xpath="//*[contains(@class, 'signup-modal')]")
+    @FindBy(xpath = "//*[contains(@class, 'signup-modal')]")
     private WebElement loginRegisterDialog;
 
-    @FindBy(xpath="//*[contains(@class, 'signup-modal')]//*[@ng-switch-when='login']")
+    @FindBy(xpath = "//*[contains(@class, 'signup-modal')]//*[@ng-switch-when='login']")
     private WebElement registerModeDialog;
 
     @FindBy(xpath = "//*[@ng-switch-when='login']//input[@type='email']")

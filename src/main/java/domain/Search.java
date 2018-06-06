@@ -20,9 +20,8 @@ public class Search {
 
     private DateTime getDateFromString(String dateText) {
         DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
-        DateTime dateTime = formatter.parseDateTime(dateText);
 
-        return dateTime;
+        return formatter.parseDateTime(dateText);
     }
 
     public TripType getTripType() {

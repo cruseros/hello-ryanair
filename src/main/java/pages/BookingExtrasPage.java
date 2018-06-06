@@ -8,10 +8,10 @@ import pages.helpers.PageObject;
 
 public class BookingExtrasPage extends PageObject {
 
-    @FindBy(xpath="//*[contains(@class, 'extras-panel') and contains(@class, 'container')]")
+    @FindBy(xpath = "//*[contains(@class, 'extras-panel') and contains(@class, 'container')]")
     private WebElement bookingExtrasPage;
 
-    @FindBy(xpath="//section[@id='booking-selection']//*[contains(@class, 'core-btn-block')]")
+    @FindBy(xpath = "//section[@id='booking-selection']//*[contains(@class, 'core-btn-block')]")
     private WebElement checkOutButton;
 
     public BookingExtrasPage() {

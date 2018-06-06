@@ -3,8 +3,7 @@ package steps;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import domain.Search;
-import domain.TripType;
+import domain.*;
 import pages.*;
 
 import java.util.logging.Logger;
@@ -17,9 +16,14 @@ public class CommonSteps {
 
     //------------------------------------------ Methods
 
-    @Given("^that the user is not logged in$")
+    @Given("^that the user is logged in$")
     public void checkNotLoggedUser() {
 
+        Header header = new Header();
+
+        LoginRegisterDialog loginRegisterDialog = header.clickInLoginButon();
+
+        loginRegisterDialog.login();
     }
 
     @When("^I make a booking from \"([A-Z]+)\" to \"([A-Z]+)\" on (\\d{2}/\\d{2}/\\d{4})$")
@@ -36,13 +40,7 @@ public class CommonSteps {
 
         BookingExtrasPriorityDialog bookingExtrasPriorityDialog = bookingExtrasPage.clickInCheckOutButton();
 
-        BookingPaymentPage bookingPaymentPage = bookingExtrasPriorityDialog.closeDialog();
-
-        Header header = new Header();
-
-        LoginRegisterDialog loginRegisterDialog = header.clickInLoginButon();
-
-        loginRegisterDialog.login();
+        bookingExtrasPriorityDialog.closeDialog();
 
         logger.info("Making a " + TripType.ONE_WAY + " booking");
         logger.info(departure + " " + destination + " " + outboundDate);
@@ -53,10 +51,10 @@ public class CommonSteps {
 
         BookingPaymentPage bookingPaymentPage = new BookingPaymentPage();
 
-        bookingPaymentPage.fillRandomPaxInfo();
-        bookingPaymentPage.fillRandomContactDetails();
-        bookingPaymentPage.fillCreditCard(cardNumber, expiryMonth, expiryYear, securityCode);
-        bookingPaymentPage.fillRandomBillingInfo();
+        bookingPaymentPage.fillPassengerDetails(new PassengerDetails());
+        bookingPaymentPage.fillContactDetails(new ContactDetails());
+        bookingPaymentPage.fillCreditCard(new CreditCard(cardNumber, expiryMonth, expiryYear, securityCode));
+        bookingPaymentPage.fillBillingInfo(new BillingInfo());
 
         bookingPaymentPage.clickInPayNowButton();
     }

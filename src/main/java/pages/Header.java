@@ -11,7 +11,7 @@ public class Header extends PageObject {
     @FindBy(id = "ryanair-navbar")
     private WebElement header;
 
-    @FindBy(xpath = "//*[@ui-sref='login' and contains(@class, 'core-btn-secondary')]")
+    @FindBy(id = "myryanair-auth-login")
     private WebElement loginButton;
 
     public Header() {
