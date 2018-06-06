@@ -1,8 +1,8 @@
 package pages;
 
 import domain.Search;
-import domain.SearchPaxs;
 import domain.TripType;
+import org.joda.time.DateTime;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,40 +12,43 @@ import pages.helpers.PageObject;
 
 public class HomePage extends PageObject {
 
-    @FindBy(id="home")
+    @FindBy(id = "home")
     private WebElement homepage;
 
-    @FindBy(id="lbl-flight-search-type-return")
+    @FindBy(id = "lbl-flight-search-type-return")
     private WebElement returnTripTypRadioButton;
 
-    @FindBy(id="lbl-flight-search-type-one-way")
+    @FindBy(id = "lbl-flight-search-type-one-way")
     private WebElement oneWayTripTypeRadioButton;
 
-    @FindBy(xpath="//input[@aria-labelledby='label-airport-selector-from']")
+    @FindBy(xpath = "//input[@aria-labelledby='label-airport-selector-from']")
     private WebElement departureAirportField;
 
-    @FindBy(xpath="//input[@aria-labelledby='label-airport-selector-to']")
+    @FindBy(xpath = "//input[@aria-labelledby='label-airport-selector-to']")
     private WebElement destinationAirportField;
 
-    @FindBy(xpath="//*[@translate='common.buttons.continue']")
+    @FindBy(xpath = "//*[@translate='common.buttons.continue']")
     private WebElement continueButton;
 
-    @FindBy(xpath="//div[@name='startDate']/.//*[@name='dateInput0']")
-    private WebElement flyOutDateField;
+    @FindBy(xpath = "//input[@name='startDate']/..//input[@name = 'dateInput0']")
+    private WebElement flyOutDayField;
 
-    @FindBy(xpath="//input[@name='endDate']/..//*[@name='dateInput0']")
-    private WebElement flyBackDateField;
+    @FindBy(xpath = "//input[@name='startDate']/..//input[@name = 'dateInput1']")
+    private WebElement flyOutMonthField;
 
-    @FindBy(xpath="//div[@ng-switch-default]/label[@id='label-pax-input']/../div[@class='value']")
-    private WebElement paxInputDropDrownButton;
+    @FindBy(xpath = "//input[@name='startDate']/..//input[@name = 'dateInput2']")
+    private WebElement flyOutYearField;
 
-    @FindBy(xpath="//*[@value='paxInput.adults']/div[@class='details']")
-    private WebElement adultsNumberLabel;
+    @FindBy(xpath = "//input[@name='endDate']/..//input[@name = 'dateInput0']")
+    private WebElement flyBackDayField;
 
-    @FindBy(xpath="//*[@value='paxInput.children']/div[@class='details']")
-    private WebElement childrenNumberLabel;
+    @FindBy(xpath = "//input[@name='endDate']/..//input[@name = 'dateInput1']")
+    private WebElement flyBackMonthField;
 
-    @FindBy(xpath="//*[@translate='common.buttons.lets_go']")
+    @FindBy(xpath = "//input[@name='endDate']/..//input[@name = 'dateInput2']")
+    private WebElement flyBackYearField;
+
+    @FindBy(xpath = "//*[@translate='common.buttons.lets_go']")
     private WebElement letsGoButton;
 
     public HomePage() {
@@ -54,20 +57,25 @@ public class HomePage extends PageObject {
         DriverWait.until(ExpectedConditions.visibilityOf(homepage));
     }
 
+    private void fillDateField(DateTime date, WebElement weDay, WebElement weMonth, WebElement weYear) {
+        Field.write(weDay, String.valueOf(date.getDayOfMonth()));
+        Field.write(weMonth, String.valueOf(date.getMonthOfYear()));
+        Field.write(weYear, String.valueOf(date.getYear()));
+    }
+
     private void fillSearch(Search search) {
         selectTripType(search.getTripType());
 
-        new Field(departureAirportField).write(search.getOrigin());
-        new Field(destinationAirportField).write(search.getDestination());
+        Field.write(departureAirportField, search.getOrigin());
+        Field.write(destinationAirportField, search.getDestination());
 
         continueButton.click();
 
-        new Field(flyOutDateField).write(search.getOutboundDate());
-        if(search.getTripType().equals(TripType.RETURN_WAY)) {
-            new Field(flyBackDateField).write(search.getInboundDate());
+        DriverWait.until(ExpectedConditions.visibilityOf(flyOutDayField));
+        fillDateField(search.getOutboundDate(), flyOutDayField, flyOutMonthField, flyOutYearField);
+        if (search.getTripType().equals(TripType.RETURN_WAY)) {
+            fillDateField(search.getInboundDate(), flyBackDayField, flyBackMonthField, flyBackYearField);
         }
-
-        selectNumberPaxs(search.getSearchPaxs());
     }
 
     private void selectTripType(TripType tripType) {
@@ -76,16 +84,12 @@ public class HomePage extends PageObject {
         WebElement we = tripType.equals(TripType.ONE_WAY) ? oneWayTripTypeRadioButton :
                 tripType.equals(TripType.RETURN_WAY) ? returnTripTypRadioButton : null;
 
-        if(we != null) {
+        if (we != null) {
             we.click();
         }
     }
 
-    private void selectNumberPaxs(SearchPaxs searchPaxs) {
-
-    }
-
-    private BookingSelectionPage clickInLetsGoButton(){
+    private BookingSelectionPage clickInLetsGoButton() {
         letsGoButton.click();
         return new BookingSelectionPage();
     }

@@ -8,7 +8,7 @@ import pages.helpers.PageObject;
 
 public class BookingExtrasPage extends PageObject {
 
-    @FindBy(xpath="//contains[(@class, 'extras-panel') and contains(@class, 'container')]")
+    @FindBy(xpath="//*[contains(@class, 'extras-panel') and contains(@class, 'container')]")
     private WebElement bookingExtrasPage;
 
     @FindBy(xpath="//section[@id='booking-selection']//*[contains(@class, 'core-btn-block')]")
@@ -20,9 +20,9 @@ public class BookingExtrasPage extends PageObject {
         DriverWait.until(ExpectedConditions.visibilityOf(bookingExtrasPage));
     }
 
-    public BookingPaymentPage clickInCheckOutButton() {
+    public BookingExtrasPriorityDialog clickInCheckOutButton() {
         checkOutButton.click();
 
-        return new BookingPaymentPage();
+        return new BookingExtrasPriorityDialog();
     }
 }

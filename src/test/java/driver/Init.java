@@ -1,4 +1,4 @@
-package selenium;
+package driver;
 
 import cucumber.api.java.Before;
 import org.openqa.selenium.WebDriver;
@@ -7,7 +7,7 @@ import pages.helpers.Driver;
 
 import java.util.concurrent.TimeUnit;
 
-public class Common {
+public class Init {
 
     //------------------------------------------ Constants
 
@@ -23,15 +23,17 @@ public class Common {
         Driver.getInstance().setDriver(new ChromeDriver());
 
         WebDriver driver = Driver.getDriver();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(WAITING_TIME, TimeUnit.SECONDS);
+        personalizeDriver(driver);
 
-        driver.get(BASE_URL + LOCALE_URL);
+        goToUrl(driver,BASE_URL + LOCALE_URL);
     }
 
-    //TODO:@After
-    public static void teardown() {
-        WebDriver driver = Driver.getDriver();
-        driver.quit();
+    private static void personalizeDriver(WebDriver driver) {
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(WAITING_TIME, TimeUnit.SECONDS);
+    }
+
+    private static void goToUrl(WebDriver driver, String url) {
+        driver.get(url);
     }
 }

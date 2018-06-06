@@ -1,28 +1,28 @@
 package domain;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 public class Search {
     private TripType tripType;
     private String origin;
     private String destination;
-    private String outboundDate;
-    private String inboundDate;
-    private SearchPaxs searchPaxs;
+    private DateTime outboundDate;
+    private DateTime inboundDate;
 
-    public Search(TripType tripType, String origin, String destination, String outboundDate, String inboundDate, SearchPaxs searchPaxs) {
+    public Search(TripType tripType, String origin, String destination, String outboundDate) {
         this.tripType = tripType;
         this.origin = origin;
         this.destination = destination;
-        this.outboundDate = outboundDate;
-        this.inboundDate = inboundDate;
-        this.searchPaxs = searchPaxs;
+        this.outboundDate = getDateFromString(outboundDate);
     }
 
-    public Search(TripType tripType, String origin, String destination, String outboundDate, SearchPaxs searchPaxs) {
-        this.tripType = tripType;
-        this.origin = origin;
-        this.destination = destination;
-        this.outboundDate = outboundDate;
-        this.searchPaxs = searchPaxs;
+    private DateTime getDateFromString(String dateText) {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
+        DateTime dateTime = formatter.parseDateTime(dateText);
+
+        return dateTime;
     }
 
     public TripType getTripType() {
@@ -37,15 +37,11 @@ public class Search {
         return destination;
     }
 
-    public String getOutboundDate() {
+    public DateTime getOutboundDate() {
         return outboundDate;
     }
 
-    public String getInboundDate() {
+    public DateTime getInboundDate() {
         return inboundDate;
-    }
-
-    public SearchPaxs getSearchPaxs() {
-        return searchPaxs;
     }
 }

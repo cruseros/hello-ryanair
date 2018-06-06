@@ -1,9 +1,9 @@
 package steps;
 
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import domain.Search;
-import domain.SearchPaxs;
 import domain.TripType;
 import pages.*;
 
@@ -17,33 +17,55 @@ public class CommonSteps {
 
     //------------------------------------------ Methods
 
-    @When("^I make a booking from \"([A-Z]+)\" to \"([A-Z]+)\" on (\\d{2}/\\d{2}/\\d{4}) for (\\d+) adults and (\\d+) child$")
-    public void makeBooking(String departure, String destination, String outboundDate, int numAdults, int numChild) {
+    @Given("^that the user is not logged in$")
+    public void checkNotLoggedUser() {
+
+    }
+
+    @When("^I make a booking from \"([A-Z]+)\" to \"([A-Z]+)\" on (\\d{2}/\\d{2}/\\d{4})$")
+    public void makeBooking(String departure, String destination, String outboundDate) {
 
         HomePage homePage = new HomePage();
 
         BookingSelectionPage bookingSelectionPage =
-                homePage.performSearch(new Search(TripType.ONE_WAY, departure, destination, outboundDate, new SearchPaxs(numAdults, numChild)));
+                homePage.performSearch(new Search(TripType.ONE_WAY, departure, destination, outboundDate));
 
         BookingExtrasSeatsDialog bookingExtrasSeatsDialog = bookingSelectionPage.doGenericBooking(TripType.ONE_WAY);
 
         BookingExtrasPage bookingExtrasPage = bookingExtrasSeatsDialog.closeDialog();
 
-        BookingPaymentPage bookingPaymentPage = bookingExtrasPage.clickInCheckOutButton();
+        BookingExtrasPriorityDialog bookingExtrasPriorityDialog = bookingExtrasPage.clickInCheckOutButton();
 
+        BookingPaymentPage bookingPaymentPage = bookingExtrasPriorityDialog.closeDialog();
 
+        Header header = new Header();
 
+        LoginRegisterDialog loginRegisterDialog = header.clickInLoginButon();
 
+        loginRegisterDialog.login();
 
         logger.info("Making a " + TripType.ONE_WAY + " booking");
-        logger.info(departure + " " + destination + " " + outboundDate + " " + numAdults + " " + numChild);
+        logger.info(departure + " " + destination + " " + outboundDate);
     }
 
-    @When("^I pay for booking with card details \"([\\d\\s]+)\", \"(\\d{2}/\\d{2})\" and \"(\\d+)\"$")
-    public void i_pay_for_booking_with_card_details_and() {
+    @When("^I pay for booking with card details \"([\\d\\s]+)\", \"(\\d{2})/(\\d{4})\" and \"(\\d+)\"$")
+    public void completePaymentInfo(String cardNumber, String expiryMonth, String expiryYear, String securityCode) {
+
+        BookingPaymentPage bookingPaymentPage = new BookingPaymentPage();
+
+        bookingPaymentPage.fillRandomPaxInfo();
+        bookingPaymentPage.fillRandomContactDetails();
+        bookingPaymentPage.fillCreditCard(cardNumber, expiryMonth, expiryYear, securityCode);
+        bookingPaymentPage.fillRandomBillingInfo();
+
+        bookingPaymentPage.clickInPayNowButton();
     }
 
     @Then("^I should get payment declined message$")
-    public void i_should_get_payment_declined_message() {
+    public void checkPaymentDeclined() {
+
+        BookingPaymentPage bookingPaymentPage = new BookingPaymentPage();
+
+        bookingPaymentPage.isFailedPaymentDialogDisplayed();
     }
 }

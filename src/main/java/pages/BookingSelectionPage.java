@@ -7,13 +7,12 @@ import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import pages.helpers.DriverWait;
 import pages.helpers.PageObject;
+import pages.helpers.WebElements;
 
 import java.util.List;
 import java.util.logging.Logger;
 
 public class BookingSelectionPage extends PageObject {
-
-    private static final Logger logger = Logger.getLogger(BookingSelectionPage.class.getName());
 
     @FindBy(id = "booking-selection")
     private WebElement bookingSelectionpage;
@@ -24,14 +23,16 @@ public class BookingSelectionPage extends PageObject {
     @FindBys(@FindBy(xpath = "//*[@id='inbound']//*[contains(@class,'flight-header__min-price')]//*[contains(@class, 'flights-table-price__price')]"))
     private List<WebElement> inboundsPriceButtons;
 
-    @FindBy(xpath = "//*[@id='outbound']//*[contains(@class, 'standard')]//*[contains(@class, 'flights-table-fares__fare-radio')]")
-    private WebElement outboundRegularFareRadioButton;
+    @FindBy(xpath = "//*[@id='outbound']//*[contains(@class, 'standard')]")
+    private WebElement outboundRegularFareRadioBox;
 
-    @FindBy(xpath = "//*[@id='inbound']//*[contains(@class, 'standard')]//*[contains(@class, 'flights-table-fares__fare-radio')]")
+    @FindBy(xpath = "//*[@id='inbound']//*[contains(@class, 'standard')]")
     private WebElement inboundRegularFareRadioButton;
 
     @FindBy(id = "continue")
     private WebElement continueButton;
+
+    private static final Logger logger = Logger.getLogger(BookingSelectionPage.class.getName());
 
     public BookingSelectionPage() {
         super();
@@ -39,16 +40,10 @@ public class BookingSelectionPage extends PageObject {
         DriverWait.until(ExpectedConditions.visibilityOf(bookingSelectionpage));
     }
 
-    private WebElement getRandomElement(List<WebElement> webElements) {
-        int randomPosition = (int) (Math.random() * (webElements.size()));
-
-        return webElements.get(randomPosition);
-    }
-
     private void selectRandomBound(List<WebElement> prices, WebElement regularFare) {
         DriverWait.until(ExpectedConditions.visibilityOf(prices.get(0)));
 
-        getRandomElement(prices).click();
+        WebElements.getRandomElement(prices).click();
 
         DriverWait.until(ExpectedConditions.visibilityOf(regularFare));
 
@@ -56,7 +51,7 @@ public class BookingSelectionPage extends PageObject {
     }
 
     public void selectRandomOutbound() {
-        selectRandomBound(outboundPriceButtons, outboundRegularFareRadioButton);
+        selectRandomBound(outboundPriceButtons, outboundRegularFareRadioBox);
     }
 
     public void selectRandomInbound() {

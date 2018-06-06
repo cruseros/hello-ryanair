@@ -8,15 +8,23 @@ import pages.helpers.PageObject;
 
 public class BookingExtrasPriorityDialog extends PageObject {
 
-    @FindBy(id="ngdialog4")
+    @FindBy(id="ngdialog2")
     private WebElement bookingExtrasPriorityDialog;
 
-    @FindBy(xpath="//class[@id='booking-selection']//*[contains(@class, 'core-btn-block')]")//;popup-msg__close-icon
-    private WebElement checkOutButton;
+    @FindBy(xpath="//button[contains(@class, 'popup-msg__button--cancel')]")
+    private WebElement noThanksButton;
 
     public BookingExtrasPriorityDialog() {
         super();
 
         DriverWait.until(ExpectedConditions.visibilityOf(bookingExtrasPriorityDialog));
+    }
+
+    public BookingPaymentPage closeDialog() {
+        DriverWait.until(ExpectedConditions.visibilityOf(noThanksButton));
+
+        noThanksButton.click();
+
+        return new BookingPaymentPage();
     }
 }
